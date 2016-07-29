@@ -1,11 +1,12 @@
 #!/usr/bin/perl -w 
 # nagios:-epn
-#
-# check_bgp_mikrotik - nagios plugin
-#
-# Copyright (C) 2014 Mauro Fiore
-#
-#use strict;
+
+#########################################
+#  check_bgp_mikrotik - nagios plugin 	#
+#					#
+#       Mauro - blog.openskills.it	#
+#########################################
+
 use lib qw( /usr/lib/nagios/plugins );
 use utils qw(%ERRORS $TIMEOUT &print_revision &support &usage);
 use Switch;
