@@ -14,7 +14,7 @@ use Mtik;
 use Nagios::Plugin::Getopt;
 $ng = Nagios::Plugin::Getopt->new(
 	usage => 'Usage: %s -H mtik_host -u mtik_user -p mtik_passwd -b BGP_peer_ip',
-	version => '0.1 [http://www.openskills.it]',
+	version => '0.2 [http://blog.openskills.it]',
 );
 $ng->arg(spec => 'host|H=s', help => "Mikrotik Host", required => 1);
 $ng->arg(spec => 'user|u=s', help => "API username", required => 1);
@@ -27,8 +27,9 @@ if (Mtik::login($ng->get('host'),$ng->get('user'),$ng->get('pass')))
 	my @cmd = ("/routing/bgp/peer/print");
 	my($retval,@results) = Mtik::raw_talk(\@cmd);
 	$loo=0;
+	$find=0;
 	foreach my $result (@results) {
-		printf "$result\n";
+		#printf "$result\n";
 		my @values = split('=', $result);
 		$nums= @values;
 		if ($nums == 3){ 
@@ -37,6 +38,7 @@ if (Mtik::login($ng->get('host'),$ng->get('user'),$ng->get('pass')))
 			if ($chiave eq "remote-address"){
 				if ($valore eq $ng->get('bgppeer')){
 					$loo = 1;
+					$find= 1;
 				}else {
 					$loo = 0;	
 				}
@@ -45,13 +47,18 @@ if (Mtik::login($ng->get('host'),$ng->get('user'),$ng->get('pass')))
 				switch ($chiave){
 					case "state"	{  $status=$valore }
 					case "uptime"	{  $upfrom=$valore }
+					case "disabled" {  $disabled=$valore }
 				}
 			}
   		}	
 	}
 	Mtik::logout;
-	if ($loo == 0){
-		print "UNKNOWN - Wrong remote peer address or peer disable \n"; 
+	if ($find == 0){
+		print "UNKNOWN - Peer remote address not found \n"; 
+		exit (1);
+	}
+	if ($disabled eq "true"){
+		print "UNKNOWN - Peer disable \n"; 
 		exit (1);
 	}
 	if ($status eq "established"){
