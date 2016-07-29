@@ -8,6 +8,7 @@
 #########################################
 
 use lib qw( /usr/lib/nagios/plugins );
+use lib qw( /opt/librenms/plugins );
 use utils qw(%ERRORS $TIMEOUT &print_revision &support &usage);
 use Switch;
 use Mtik;
