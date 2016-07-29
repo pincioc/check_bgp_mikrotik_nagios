@@ -38,7 +38,7 @@ if (Mtik::login($ng->get('host'),$ng->get('user'),$ng->get('pass')))
 			if ($chiave eq "remote-address"){
 				if ($valore eq $ng->get('bgppeer')){
 					$loo = 1;
-					$find= 1;
+					$find = 1;
 				}else {
 					$loo = 0;	
 				}
