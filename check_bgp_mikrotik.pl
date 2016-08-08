@@ -10,7 +10,7 @@
 use lib qw( /usr/lib/nagios/plugins );
 use lib qw( /opt/librenms/plugins );
 use utils qw(%ERRORS $TIMEOUT &print_revision &support &usage);
-use Mikrotik;
+use MikroTik;
 use Nagios::Plugin::Getopt;
 $ng = Nagios::Plugin::Getopt->new(
 	usage => 'Usage: %s -H mtik_host -a apiport -u mtik_user -p mtik_passwd -b BGP_peer_ip -T [min:MAX]',
