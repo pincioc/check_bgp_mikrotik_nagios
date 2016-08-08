@@ -36,7 +36,7 @@ if (Mtik::login($ng->get('host'),$ng->get('user'),$ng->get('pass'),$apiport))
 	my($retval,@results) = Mtik::raw_talk(\@cmd);
 	if (@results == 1){
 		print "UNKNOWN - Peer remote address not found \n";
-		exit (1);
+		exit (3);
 	}
 	my @values;
 	foreach my $result (@results) {
