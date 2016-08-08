@@ -32,7 +32,7 @@ if (!length $ng->get('apiport'))
 }		
 if (Mtik::login($ng->get('host'),$ng->get('user'),$ng->get('pass'),$apiport))
 	{
-	my @cmd = ("/routing/bgp/peer/print");
+	my @cmd = ("/routing/bgp/peer/print","=status=","?remote-address=". $ng->get('bgppeer'));
 	my($retval,@results) = Mtik::raw_talk(\@cmd);
 	$loo=0;
 	$find=0;
@@ -56,6 +56,7 @@ if (Mtik::login($ng->get('host'),$ng->get('user'),$ng->get('pass'),$apiport))
 					case "state"	{  $status=$valore }
 					case "uptime"	{  $upfrom=$valore }
 					case "disabled" {  $disabled=$valore }
+					case "prefix-count" {  $prefix=$valore }
 				}
 			}
   		}	
@@ -70,17 +71,6 @@ if (Mtik::login($ng->get('host'),$ng->get('user'),$ng->get('pass'),$apiport))
 		exit (1);
 	}
 	if ($status eq "established"){
-		Mtik::login($ng->get('host'),$ng->get('user'),$ng->get('pass'),$apiport);
-		my @cmd2 = ("/routing/bgp/peer/print","=status=","?remote-address=". $ng->get('bgppeer'),"=.proplist=prefix-count");
-		my($retval,@results) = Mtik::raw_talk(\@cmd2);
-		foreach my $result (@results) {
-			my @values = split('=', $result);
-			$nums= @values;
-			if ($nums == 3){ 
-				$prefix=$values[2];
-			}
-		}
-		Mtik::logout;
 		print "OK - Peer BGP $status from $upfrom with $prefix prefix count\n"; 
 		exit (0);
 		
